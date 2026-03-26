@@ -11,6 +11,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var previewCoordinator: SharedPreviewWindowCoordinator?
     private var keybindHelper: KeybindHelper?
     private var activeAppIndicator: ActiveAppIndicatorCoordinator?
+    private var dockLocker: DockLocker?
+    private var dockLockingObserver: Defaults.Observation?
     private var statusBarItem: NSStatusItem?
     private var updaterController: SPUStandardUpdaterController
     @ObservedObject var updaterState: UpdaterState
@@ -82,6 +84,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             if Defaults[.showActiveAppIndicator] {
                 activeAppIndicator = ActiveAppIndicatorCoordinator()
+            }
+
+            if Defaults[.enableDockLocking] {
+                dockLocker = DockLocker()
+            }
+
+            dockLockingObserver = Defaults.observe(.enableDockLocking) { [weak self] change in
+                DispatchQueue.main.async {
+                    if change.newValue {
+                        if self?.dockLocker == nil {
+                            self?.dockLocker = DockLocker()
+                        }
+                    } else {
+                        self?.dockLocker = nil
+                    }
+                }
             }
 
             if updater.automaticallyChecksForUpdates {
@@ -212,8 +230,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 dockObserver?.reset()
                 keybindHelper?.reset()
                 appClosureObserver?.reset()
+                dockLocker?.reset()
             }
-        }
     }
 
     @objc func openSettingsWindow(_ sender: Any?) {

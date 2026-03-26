@@ -42,6 +42,12 @@ extension Defaults.Keys {
     static let enableCmdRightClickQuit = Key<Bool>("enableCmdRightClickQuit", default: true)
     static let quitAppOnWindowClose = Key<Bool>("quitAppOnWindowClose", default: false)
     static let enableDockScrollGesture = Key<Bool>("enableDockScrollGesture", default: false)
+
+    // Dock Locking
+    static let enableDockLocking = Key<Bool>("enableDockLocking", default: false)
+    static let lockedDockScreenIdentifier = Key<String>("lockedDockScreenIdentifier", default: "")
+    static let dockLockOverrideModifier = Key<Int>("dockLockOverrideModifier", default: DockLockModifier.option.rawValue)
+
     static let dockIconMediaScrollBehavior = Key<DockIconMediaScrollBehavior>("dockIconMediaScrollBehavior", default: .adjustVolume)
     static let mediaWidgetScrollBehavior = Key<MediaWidgetScrollBehavior>("mediaWidgetScrollBehavior", default: .seekPlayback)
     static let mediaWidgetScrollDirection = Key<MediaWidgetScrollDirection>("mediaWidgetScrollDirection", default: .vertical)
